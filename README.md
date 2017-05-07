@@ -9,3 +9,9 @@ source activate aws-python-lambdas
 # after installing new libs update conda-dev-env.yml
 conda env export --file conda-dev-env.yml 
 </pre>
+
+## Building
+
+<pre># build lambda function contained inside src/hello_world
+python build.py --src-path src/hello_world --dist-path dist
+</pre>
