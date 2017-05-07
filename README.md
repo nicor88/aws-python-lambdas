@@ -20,7 +20,7 @@ By default the upload to S3 is disabled, but it's possible to
 upload the lambda to S3 based on the config specified for each lambdas
 running the following command:
 <pre># upload to s3
-python build.py --src-path src/hello_world --dist-path dist --upload True
+python build.py --src-path src/hello_world --dist-path dist --s3-upload True
 </pre>
 
 
