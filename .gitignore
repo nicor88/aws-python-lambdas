@@ -1,6 +1,9 @@
 # pycharm
 .idea
 
+# pycache
+src/*/__pycache__
+
 # building
 dist/
 *.zip
