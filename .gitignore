@@ -1,0 +1,6 @@
+# pycharm
+.idea
+
+# building
+dist/
+*.zip
