@@ -1,0 +1,8 @@
+name: 'link_kinesis_stream_to_firehose'
+runtime: 'python3.6'
+s3_bucket: 'nicor-dev'
+s3_key: 'deployments/lambdas/link_kinesis_stream_to_firehose.zip'
+live_version: 1
+dependencies:
+  - base64
+  - boto3
