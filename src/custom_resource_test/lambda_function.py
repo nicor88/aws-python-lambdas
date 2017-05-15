@@ -1,5 +1,5 @@
 import boto3
-import cfnresponce
+from cfnresponce import send, SUCCESS
 
 print('Loading function')
 
@@ -12,5 +12,5 @@ def lambda_handler(event, context):
     # example failing status
     # cfnresponse.send(event, context, cfnresponse.FAILED, payLoad)
 
-    cfnresponse.send(event, context, cfnresponse.SUCCESS, payLoad)
+    send(event, context, SUCCESS, payLoad)
     return payLoad
