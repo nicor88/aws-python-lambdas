@@ -1,5 +1,5 @@
 import boto3
-import cfnresponce
+import cfnresponse
 
 print('Loading function')
 
