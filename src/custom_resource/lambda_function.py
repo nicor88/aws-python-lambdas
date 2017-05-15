@@ -1,5 +1,5 @@
 import boto3
-import cfnresponce
+from cfnresponce import send, SUCCESS, FAILED
 
 print('Loading function')
 
@@ -9,5 +9,8 @@ def lambda_handler(event, context):
 
     payLoad['Purpose'] = '{} a custom resource'.format(event['RequestType'])
 
-    cfnresponse.send(event, context, cfnresponse.SUCCESS, payLoad)
+    # example failing status
+    # send(event, context, FAILED, payLoad)
+
+    send(event, context, SUCCESS, payLoad)
     return payLoad
