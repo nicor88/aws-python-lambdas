@@ -10,7 +10,7 @@ def lambda_handler(event, context):
     payLoad['Purpose'] = '{} a custom resource'.format(event['RequestType'])
 
     # example failing status
-    # cfnresponce.send(event, context, cfnresponce.FAILED, payLoad)
+    # cfnresponse.send(event, context, cfnresponse.FAILED, payLoad)
 
-    cfnresponce.send(event, context, cfnresponce.SUCCESS, payLoad)
+    cfnresponse.send(event, context, cfnresponse.SUCCESS, payLoad)
     return payLoad
