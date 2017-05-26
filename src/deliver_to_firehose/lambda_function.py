@@ -11,7 +11,6 @@ logger.setLevel(logging.DEBUG)
 def lambda_handler(event, context):
     # config lambda variables
     cross_account_role_arn = os.environ['CROSS_ACCOUNT_ROLE_ARN']
-    region_name = os.environ['AWS_REGION_NAME']
     delivery_stream = os.environ['DELIVERY_STREAM']
 
     # assume cross-account role
@@ -20,11 +19,10 @@ def lambda_handler(event, context):
         RoleArn=cross_account_role_arn,
         RoleSessionName='AssumeDataEngRole', DurationSeconds=900)
 
-    firehose = boto3.resource(service_name='firehose',
-                              region_name=region_name,
-                              aws_access_key_id=sts_response['Credentials']['AccessKeyId'],
-                              aws_secret_access_key=sts_response['Credentials']['SecretAccessKey'],
-                              aws_session_token=sts_response['Credentials']['SessionToken'])
+    firehose = boto3.client('firehose',
+                            aws_access_key_id=sts_response['Credentials']['AccessKeyId'],
+                            aws_secret_access_key=sts_response['Credentials']['SecretAccessKey'],
+                            aws_session_token=sts_response['Credentials']['SessionToken'])
 
     records = event['Records']
     records_for_firehose = [{'Data': base64.b64decode(r['kinesis']['data'])} for r in records]
