@@ -7,3 +7,4 @@ src/*/__pycache__
 # building
 dist/
 *.zip
+tmp/
