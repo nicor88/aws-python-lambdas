@@ -8,8 +8,8 @@ dependencies:
 - botocore=1.5.38=py36_0
 - docutils=0.13.1=py36_0
 - jmespath=0.9.0=py36_0
-- nomkl=1.0=0
-- numpy=1.13.0=py36_nomkl_0
+- mkl=2017.0.1=0
+- numpy=1.13.0=py36_0
 - openssl=1.0.2k=1
 - pip=9.0.1=py36_1
 - py=1.4.33=py36_0

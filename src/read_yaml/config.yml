@@ -6,6 +6,7 @@ libs:
   - boto3
   - dateutil
   - numpy
+  - py
   - pytz
   - six
   - yaml # it's the folder name for pyyaml
