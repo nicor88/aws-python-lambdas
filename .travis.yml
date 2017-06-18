@@ -54,7 +54,7 @@ deploy:
     bucket:            $AWS_BUCKET
     region:            $AWS_BUCKET_REGION
     local_dir:         dist
-    upload-dir:        lambdas/travis_build
+    upload-dir:        deployments/lambdas/travis_build
     acl:               private # keep them private
     skip_cleanup:      true
     on:
