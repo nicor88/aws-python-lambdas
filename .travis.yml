@@ -42,7 +42,7 @@ before_deploy:
   # create folders
   - mkdir -p dist
   - mkdir -p tmp
-  # build lambdas
+  # create zip for each lambda folder in src
   - for i in src/*/; do python .travis/build_lambda.py "$i"; done
 
 deploy:
