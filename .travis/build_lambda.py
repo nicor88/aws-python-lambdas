@@ -64,6 +64,11 @@ for p in libs_paths:
         logger.info('Copying tree path {} to {}'.format(p, dst))
         t = copy_tree(p, dst)
 
+# if 'numpy' in libs:
+logger.info('Copy mkl because numpy is in libs')
+t = copy_tree(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0'), os.path.join(tmp_dir, 'mkl-2017.0.1-0'))
+# shutil.copy2(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0.tar.bz2'), tmp_dir)
+
 # create zip
 zip_file_dst = os.path.join('dist', lambda_path.split('/')[-2])
 logger.info('creating {}'.format(zip_file_dst + '.zip'))
