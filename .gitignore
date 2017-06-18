@@ -8,3 +8,4 @@ src/*/__pycache__
 dist/
 *.zip
 tmp/
+/tests/unit/__pycache__

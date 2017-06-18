@@ -31,12 +31,15 @@ def create_argparser():
 
 
 def build_zip_with_libs(*, lambda_src):
+    libs_to_exclude = ['boto3', 'botocore']
     config_path = os.path.join(lambda_src, 'config.yml')
     print(config_path)
     with open(config_path, 'r') as stream:
         lambda_cfg = yaml.load(stream)
-
-    conda_env_path = os.path.join(os.environ['HOME'], 'miniconda3')
+    conda_env_name = 'aws-python-lambdas'
+    conda_path = os.path.join(os.environ['HOME'], 'miniconda3')
+    conda_pkgs_path = os.path.join(os.environ['HOME'], 'miniconda3', 'pkgs')
+    conda_env_path = os.path.join(conda_path, 'envs', conda_env_name)
     site_packages = os.path.join(conda_env_path, 'lib', lambda_cfg['runtime'], 'site-packages')
 
     # create a tmp path for the lambda function
@@ -47,12 +50,32 @@ def build_zip_with_libs(*, lambda_src):
     r = copy_tree(lambda_src, tmp_dir)
 
     libs_paths = []
-    for l in lambda_cfg['libs']:
-        libs_paths.extend(glob.glob(os.path.join(site_packages, l)))
+    libs = [l for l in lambda_cfg['libs'] if not l in libs_to_exclude]
+    for l in libs:
+        lib_path = os.path.join(site_packages, l)
+        logger.info(glob.glob(lib_path))
+        lib_files = glob.glob(os.path.join(site_packages, l))
+        if len(lib_files) == 0:
+            logger.debug('trying to add single file')
+            lib_path = os.path.join(site_packages, l) + '.py'
+            lib_files = glob.glob(lib_path)
+            logger.info('Found {}'.format(lib_files))
+        libs_paths.extend(lib_files)
 
     # copy all libs to
     for p in libs_paths:
-        t = copy_tree(p, os.path.join(tmp_dir, p.split('/')[-1]))
+        if '.py' in p:
+            logger.info('Copying file {} to {}'.format(p, tmp_dir))
+            shutil.copy2(p, tmp_dir)
+        else:
+            dst = os.path.join(tmp_dir, p.split('/')[-1])
+            logger.info('Copying tree path {} to {}'.format(p, dst))
+            t = copy_tree(p, dst)
+
+    #if 'numpy' in libs:
+    #   logger.info('Copy mkl because numpy is in libs')
+    #   t = copy_tree(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0'), os.path.join(tmp_dir, 'mkl-2017.0.1-0'))
+    #   # shutil.copy2(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0.tar.bz2'), tmp_dir)
 
     zip_file_dst = os.path.join('dist', lambda_src.split('/')[-1])
     shutil.make_archive(zip_file_dst, 'zip', tmp_dir)

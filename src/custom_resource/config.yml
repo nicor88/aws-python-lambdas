@@ -2,3 +2,5 @@ name: 'CustomResourceTest'
 runtime: 'python3.6'
 s3_bucket: 'nicor-dev'
 s3_key: 'deployments/lambdas/custom_resource.zip'
+libs:
+  - boto3

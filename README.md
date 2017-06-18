@@ -12,7 +12,8 @@ conda env export --file conda-dev-env.yml
 
 ## Building
 
-<pre># build lambda function contained inside src/hello_world
+<pre>source activate aws-python-lambdas
+# build lambda function contained inside src/hello_world
 python build.py --src-path src/hello_world --dist-path dist
 </pre>
 
@@ -21,6 +22,14 @@ upload the lambda to S3 based on the config specified for each lambdas
 running the following command:
 <pre># upload to s3
 python build.py --src-path src/hello_world --dist-path dist --s3-upload True
+</pre>
+
+### Build with external packages (dev-mode)
+
+<pre>source activate aws-python-lambdas
+python build_with_packages.py --lambda-path src/read_yaml
+# upload to s3
+python build_with_packages.py --lambda-path src/read_yaml --s3-upload True
 </pre>
 
 
