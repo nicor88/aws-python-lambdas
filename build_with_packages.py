@@ -31,26 +31,27 @@ def create_argparser():
 
 
 def build_zip_with_libs(*, lambda_src):
-    libs_to_exclude = ['boto3', 'botocore', 'numpy']
     config_path = os.path.join(lambda_src, 'config.yml')
-    print(config_path)
     with open(config_path, 'r') as stream:
         lambda_cfg = yaml.load(stream)
     conda_env_name = 'aws-python-lambdas'
     conda_path = os.path.join(os.environ['HOME'], 'miniconda3')
-    conda_pkgs_path = os.path.join(os.environ['HOME'], 'miniconda3', 'pkgs')
+    # conda_pkgs_path = os.path.join(os.environ['HOME'], 'miniconda3', 'pkgs')
     conda_env_path = os.path.join(conda_path, 'envs', conda_env_name)
-    site_packages = os.path.join(conda_env_path, 'lib', lambda_cfg['runtime'], 'site-packages')
+    site_packages = os.path.join(conda_env_path, 'lib', 'python3.6', 'site-packages')
 
     # create a tmp path for the lambda function
     tmp_dir = os.path.join('tmp', lambda_src.replace('src/', ''))
     os.makedirs(tmp_dir)
 
+    if 'libs' not in lambda_cfg.keys():
+        lambda_cfg['libs'] = []
+
     # copy lambda function content to tmp dir
     r = copy_tree(lambda_src, tmp_dir)
 
     libs_paths = []
-    libs = [l for l in lambda_cfg['libs'] if not l in libs_to_exclude]
+    libs = [l for l in lambda_cfg['libs'] if l != 'numpy']
     for l in libs:
         lib_path = os.path.join(site_packages, l)
         logger.info(glob.glob(lib_path))
@@ -75,10 +76,6 @@ def build_zip_with_libs(*, lambda_src):
     if 'numpy' in lambda_cfg['libs']:
         logger.info('Use already builded version of numpy')
         t = copy_tree('libs_amazon_linux/numpy', os.path.join(tmp_dir, 'numpy'))
-        #so_libs = glob.glob('libs_amazon_linux/libmkl_*.so')
-        #logger.info(so_libs)
-        #for so_p in so_libs:
-        #   shutil.copy2(so_p, tmp_dir)
         shutil.copy2('libs_amazon_linux/libmkl_intel_lp64.so', tmp_dir)
         shutil.copy2('libs_amazon_linux/libmkl_intel_thread.so', tmp_dir)
         shutil.copy2('libs_amazon_linux/libmkl_core.so', tmp_dir)

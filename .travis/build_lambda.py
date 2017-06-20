@@ -39,10 +39,12 @@ os.makedirs(tmp_dir)
 # copy lambda function content to tmp dir
 r = copy_tree(lambda_path, tmp_dir)
 
+if 'libs' not in lambda_cfg.keys():
+    lambda_cfg['libs'] = []
+
 # create paths to be copied for the libs
-libs_to_exclude = ['boto3', 'botocore']
 libs_paths = []
-libs = [l for l in lambda_cfg['libs'] if not l in libs_to_exclude]
+libs = lambda_cfg['libs']
 for l in libs:
     lib_path = os.path.join(site_packages_path, l)
     logger.info(glob.glob(lib_path))
@@ -65,11 +67,12 @@ for p in libs_paths:
         t = copy_tree(p, dst)
 
 if 'numpy' in libs:
-    logger.info('Copy mkl because numpy is in libs')
-    shutil.copy2(os.path.join(config_path, 'lib/libmkl_intel_lp64.so', tmp_dir))
-    shutil.copy2(os.path.join(config_path, 'libmkl_intel_thread.so', tmp_dir))
-    shutil.copy2(os.path.join(config_path, 'lib/libmkl_core.so', tmp_dir))
-    shutil.copy2(os.path.join(config_path, 'libiomp5.so', tmp_dir))
+    logger.info('Copy needed libs for numpy')
+
+    shutil.copy2(os.path.join(conda_path, 'lib/libmkl_intel_lp64.so', tmp_dir))
+    shutil.copy2(os.path.join(conda_path, 'lib/libmkl_intel_thread.so', tmp_dir))
+    shutil.copy2(os.path.join(conda_path, 'lib/libmkl_core.so', tmp_dir))
+    shutil.copy2(os.path.join(conda_path, 'lib/libiomp5.so', tmp_dir))
 
 # create zip
 zip_file_dst = os.path.join('dist', lambda_path.split('/')[-2])

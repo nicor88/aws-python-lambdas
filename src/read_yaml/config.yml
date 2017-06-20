@@ -4,6 +4,7 @@ s3_bucket: 'nicor-dev'
 s3_key: 'deployments/lambdas/read_yaml.zip'
 libs:
   - dateutil
+  - pandas
   - py
   - pytz
   - six
