@@ -31,7 +31,7 @@ def create_argparser():
 
 
 def build_zip_with_libs(*, lambda_src):
-    libs_to_exclude = ['boto3', 'botocore']
+    libs_to_exclude = ['boto3', 'botocore', 'numpy']
     config_path = os.path.join(lambda_src, 'config.yml')
     print(config_path)
     with open(config_path, 'r') as stream:
@@ -72,10 +72,17 @@ def build_zip_with_libs(*, lambda_src):
             logger.info('Copying tree path {} to {}'.format(p, dst))
             t = copy_tree(p, dst)
 
-    #if 'numpy' in libs:
-    #   logger.info('Copy mkl because numpy is in libs')
-    #   t = copy_tree(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0'), os.path.join(tmp_dir, 'mkl-2017.0.1-0'))
-    #   # shutil.copy2(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0.tar.bz2'), tmp_dir)
+    if 'numpy' in lambda_cfg['libs']:
+        logger.info('Use already builded version of numpy')
+        t = copy_tree('libs_amazon_linux/numpy', os.path.join(tmp_dir, 'numpy'))
+        #so_libs = glob.glob('libs_amazon_linux/libmkl_*.so')
+        #logger.info(so_libs)
+        #for so_p in so_libs:
+        #   shutil.copy2(so_p, tmp_dir)
+        shutil.copy2('libs_amazon_linux/libmkl_intel_lp64.so', tmp_dir)
+        shutil.copy2('libs_amazon_linux/libmkl_intel_thread.so', tmp_dir)
+        shutil.copy2('libs_amazon_linux/libmkl_core.so', tmp_dir)
+        shutil.copy2('libs_amazon_linux/libiomp5.so', tmp_dir)
 
     zip_file_dst = os.path.join('dist', lambda_src.split('/')[-1])
     shutil.make_archive(zip_file_dst, 'zip', tmp_dir)

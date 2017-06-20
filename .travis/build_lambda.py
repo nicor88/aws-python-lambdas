@@ -66,8 +66,10 @@ for p in libs_paths:
 
 if 'numpy' in libs:
     logger.info('Copy mkl because numpy is in libs')
-    t = copy_tree(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0'), os.path.join(tmp_dir, 'mkl-2017.0.1-0'))
-    # shutil.copy2(os.path.join(conda_pkgs_path, 'mkl-2017.0.1-0.tar.bz2'), tmp_dir)
+    shutil.copy2(os.path.join(config_path, 'lib/libmkl_intel_lp64.so', tmp_dir))
+    shutil.copy2(os.path.join(config_path, 'libmkl_intel_thread.so', tmp_dir))
+    shutil.copy2(os.path.join(config_path, 'lib/libmkl_core.so', tmp_dir))
+    shutil.copy2(os.path.join(config_path, 'libiomp5.so', tmp_dir))
 
 # create zip
 zip_file_dst = os.path.join('dist', lambda_path.split('/')[-2])

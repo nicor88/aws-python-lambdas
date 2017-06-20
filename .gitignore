@@ -9,3 +9,6 @@ dist/
 *.zip
 tmp/
 /tests/unit/__pycache__
+libs_amazon_linux/
+__pycache__
+*.pyc

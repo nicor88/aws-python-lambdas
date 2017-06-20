@@ -3,9 +3,7 @@ runtime: 'python3.6'
 s3_bucket: 'nicor-dev'
 s3_key: 'deployments/lambdas/read_yaml.zip'
 libs:
-  - boto3
   - dateutil
-  - numpy
   - py
   - pytz
   - six
