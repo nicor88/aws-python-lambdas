@@ -69,10 +69,10 @@ for p in libs_paths:
 if 'numpy' in libs:
     logger.info('Copy needed libs for numpy')
 
-    shutil.copy2(os.path.join(conda_path, 'lib/libmkl_intel_lp64.so'), tmp_dir)
-    shutil.copy2(os.path.join(conda_path, 'lib/libmkl_intel_thread.so'), tmp_dir)
-    shutil.copy2(os.path.join(conda_path, 'lib/libmkl_core.so'), tmp_dir)
-    shutil.copy2(os.path.join(conda_path, 'lib/libiomp5.so'), tmp_dir)
+    shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_intel_lp64.so'), tmp_dir)
+    shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_intel_thread.so'), tmp_dir)
+    shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_core.so'), tmp_dir)
+    shutil.copy2(os.path.join(conda_env_path, 'lib', 'libiomp5.so'), tmp_dir)
 
 # create zip
 zip_file_dst = os.path.join('dist', lambda_path.split('/')[-2])
