@@ -58,7 +58,6 @@ deploy:
     acl:               private # keep them private
     skip_cleanup:      true
     on:
-      condition: "$TRAVIS_BRANCH != master"
       all_branches: true
 
 notifications:
