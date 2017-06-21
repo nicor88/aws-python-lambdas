@@ -50,8 +50,14 @@ def build_zip_with_libs(*, lambda_src):
     # copy lambda function content to tmp dir
     r = copy_tree(lambda_src, tmp_dir)
 
+
+    if 'libs' not in lambda_cfg.keys():
+    lambda_cfg['libs'] = []
+
+    # create paths to be copied for the libs
     libs_paths = []
-    libs = [l for l in lambda_cfg['libs'] if l != 'numpy']
+    libs = lambda_cfg['libs']
+
     for l in libs:
         lib_path = os.path.join(site_packages, l)
         logger.info(glob.glob(lib_path))
@@ -74,12 +80,11 @@ def build_zip_with_libs(*, lambda_src):
             t = copy_tree(p, dst)
 
     if 'numpy' in lambda_cfg['libs']:
-        logger.info('Use already builded version of numpy')
-        t = copy_tree('libs_amazon_linux/numpy', os.path.join(tmp_dir, 'numpy'))
-        shutil.copy2('libs_amazon_linux/libmkl_intel_lp64.so', tmp_dir)
-        shutil.copy2('libs_amazon_linux/libmkl_intel_thread.so', tmp_dir)
-        shutil.copy2('libs_amazon_linux/libmkl_core.so', tmp_dir)
-        shutil.copy2('libs_amazon_linux/libiomp5.so', tmp_dir)
+        logger.info('Copy needed libs for numpy')
+        shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_intel_lp64.so'), tmp_dir)
+        shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_intel_thread.so'), tmp_dir)
+        shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_core.so'), tmp_dir)
+        shutil.copy2(os.path.join(conda_env_path, 'lib', 'libiomp5.so'), tmp_dir)
 
     zip_file_dst = os.path.join('dist', lambda_src.split('/')[-1])
     shutil.make_archive(zip_file_dst, 'zip', tmp_dir)
