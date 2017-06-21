@@ -8,4 +8,5 @@ logger.info('Loading function')
 
 def lambda_handler(event, context):
     logger.info(event)
-    return event
+    output = {'purpose': 'Hello World'}
+    return output
