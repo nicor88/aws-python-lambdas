@@ -50,9 +50,8 @@ def build_zip_with_libs(*, lambda_src):
     # copy lambda function content to tmp dir
     r = copy_tree(lambda_src, tmp_dir)
 
-
     if 'libs' not in lambda_cfg.keys():
-    lambda_cfg['libs'] = []
+        lambda_cfg['libs'] = []
 
     # create paths to be copied for the libs
     libs_paths = []
@@ -81,6 +80,7 @@ def build_zip_with_libs(*, lambda_src):
 
     if 'numpy' in lambda_cfg['libs']:
         logger.info('Copy needed libs for numpy')
+        # TODO change it, not working in OSx
         shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_intel_lp64.so'), tmp_dir)
         shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_intel_thread.so'), tmp_dir)
         shutil.copy2(os.path.join(conda_env_path, 'lib', 'libmkl_core.so'), tmp_dir)
