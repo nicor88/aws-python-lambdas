@@ -2,13 +2,10 @@
 .idea
 
 # pycache
-src/*/__pycache__
+**__pycache__**
 
 # building
 dist/
-*.zip
 tmp/
-/tests/unit/__pycache__
-libs_amazon_linux/
-__pycache__
 *.pyc
+*.zip
