@@ -2,8 +2,10 @@
 .idea
 
 # pycache
-src/*/__pycache__
+**__pycache__**
 
 # building
 dist/
+tmp/
+*.pyc
 *.zip

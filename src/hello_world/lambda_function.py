@@ -1,8 +1,12 @@
-import boto3
+import logging
 
-print('Loading function')
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+logger.info('Loading function')
 
 
 def lambda_handler(event, context):
-    print(event)
-    return event
+    logger.info(event)
+    output = {'purpose': 'Hello World'}
+    return output

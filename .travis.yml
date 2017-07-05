@@ -1,0 +1,62 @@
+language: python
+
+python: '3.4'
+sudo: false
+
+# We don't care about Travis' python versions, we install conda anyway
+env:
+  global:
+    - AWS_DEFAULT_REGION=eu-west-1
+  matrix:
+    - CONDA_PYTHON_VERSION=3.6
+
+before_install:
+  # Install AWS cli
+  - pip install awscli
+  # Install conda
+  - wget http://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda3
+  - export PATH="$HOME/miniconda3/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda config --set show_channel_urls true
+  # - conda update conda # conda
+  # We use an explicit conda version
+  - conda install conda=4.2.13
+  - conda config -f --add channels babbel
+  - conda config -f --add channels conda-forge
+  - conda config -f --add channels defaults
+  - conda info -a
+
+install:
+  # create a test env from conda-test-environment.yml
+  - conda env create -n aws-python-lambdas -f $TRAVIS_BUILD_DIR/conda-dev-env.yml
+  - source activate aws-python-lambdas
+  - conda list # for info purpose only
+
+script:
+  # run tests
+  - py.test -vv -r sxX
+
+before_deploy:
+  # create folders
+  - mkdir -p dist
+  - mkdir -p tmp
+  # create zip for each lambda folder in src
+  - for i in src/*/; do python .travis/build_lambda.py "$i"; done
+
+deploy:
+  provider:          s3
+  access_key_id:     $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  bucket:            $AWS_BUCKET
+  region:            $AWS_BUCKET_REGION
+  local_dir:         dist
+  upload-dir:        deployments/lambdas/travis_build
+  acl:               private # keep them private
+  skip_cleanup:      true
+  on:
+    all_branches: true
+
+notifications:
+  email: true

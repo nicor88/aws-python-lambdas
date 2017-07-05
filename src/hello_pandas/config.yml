@@ -1,0 +1,12 @@
+name: 'HelloPandas'
+runtime: 'python3.6'
+s3_bucket: 'nicor-dev'
+s3_key: 'deployments/lambdas/hello_numpy.zip'
+libs:
+  - boto3
+  - dateutil
+  - numpy
+  - pandas
+  - py
+  - pytz
+  - six

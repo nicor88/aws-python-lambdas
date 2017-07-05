@@ -8,7 +8,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-
 def create_argparser():
     parser = argparse.ArgumentParser(
         description=__doc__,

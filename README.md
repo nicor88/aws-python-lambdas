@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nicor88/aws-python-lambdas.svg?branch=master)](https://travis-ci.org/nicor88/aws-python-lambdas)
+
 # aws-python-lambdas
 Collection of python lambda function
 
@@ -12,7 +14,8 @@ conda env export --file conda-dev-env.yml
 
 ## Building
 
-<pre># build lambda function contained inside src/hello_world
+<pre>source activate aws-python-lambdas
+# build lambda function contained inside src/hello_world
 python build.py --src-path src/hello_world --dist-path dist
 </pre>
 
@@ -21,6 +24,14 @@ upload the lambda to S3 based on the config specified for each lambdas
 running the following command:
 <pre># upload to s3
 python build.py --src-path src/hello_world --dist-path dist --s3-upload True
+</pre>
+
+### Build with external packages
+
+<pre>source activate aws-python-lambdas
+python build_with_packages.py --lambda-path src/read_yaml
+# upload to s3
+python build_with_packages.py --lambda-path src/read_yaml --s3-upload True
 </pre>
 
 
@@ -41,7 +52,7 @@ python build.py --src-path src/hello_world --dist-path dist --s3-upload True
 Where:
 *  init.py is an empty file used during the building to retrieve th yml
 *  config.yml contain the config of the lambda (e.g. s3_bucket, s3_key, libs needed for the lambda)
-*  lambda_function.py contains the real lambda with this structure
+*  lambda_function.py contains the lambda handler
 <pre>def lambda_handler(event, context):
     something = 'hello_world'
     return something
