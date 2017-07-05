@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nicor88/aws-python-lambdas.svg?branch=master)](https://travis-ci.org/nicor88/aws-python-lambdas)
+
 # aws-python-lambdas
 Collection of python lambda function
 
@@ -24,7 +26,7 @@ running the following command:
 python build.py --src-path src/hello_world --dist-path dist --s3-upload True
 </pre>
 
-### Build with external packages (dev-mode)
+### Build with external packages
 
 <pre>source activate aws-python-lambdas
 python build_with_packages.py --lambda-path src/read_yaml
@@ -50,7 +52,7 @@ python build_with_packages.py --lambda-path src/read_yaml --s3-upload True
 Where:
 *  init.py is an empty file used during the building to retrieve th yml
 *  config.yml contain the config of the lambda (e.g. s3_bucket, s3_key, libs needed for the lambda)
-*  lambda_function.py contains the real lambda with this structure
+*  lambda_function.py contains the lambda handler
 <pre>def lambda_handler(event, context):
     something = 'hello_world'
     return something
