@@ -13,9 +13,21 @@ def lambda_handler(event, context):
     # config lambda variables
     logger.info(event)
     add_newline = os.environ['ADD_NEWLINE']
+    cross_account_role_arn = os.environ['CROSS_ACCOUNT_ROLE_ARN']
     delivery_stream = os.environ['DELIVERY_STREAM']
 
-    firehose = boto3.client('firehose')
+    # assume cross-account role
+    client = boto3.client('sts')
+
+    # TODO dont know if is needed
+    sts_response = client.assume_role(
+        RoleArn=cross_account_role_arn,
+        RoleSessionName='AssumeRoleSession', DurationSeconds=900)
+
+    firehose = boto3.client('firehose',
+                            aws_access_key_id=sts_response['Credentials']['AccessKeyId'],
+                            aws_secret_access_key=sts_response['Credentials']['SecretAccessKey'],
+                            aws_session_token=sts_response['Credentials']['SessionToken'])
 
     records = event['Records']
 
@@ -38,14 +50,14 @@ def lambda_handler(event, context):
                 logger.error(res)
 
         logger.info('{} Records were put to {}'.format(len(records_acc),
-                                                       delivery_stream))
+                                                            delivery_stream))
     else:
         records_for_firehose = [{'Data': base64.b64decode(r['kinesis']['data'])} for r in
                                 records]
         logger.debug('Putting {} records to {}'.format(len(records_for_firehose), delivery_stream))
         try:
             res = firehose.put_record_batch(DeliveryStreamName=delivery_stream,
-                                            Records=records_for_firehose)
+                                        Records=records_for_firehose)
         except botocore.exceptions.ClientError as err:
             message = err.response['Error']['Message']
             res = message

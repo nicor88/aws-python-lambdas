@@ -1,4 +1,0 @@
-name: 'deliver_to_firehose_cross_account'
-runtime: 'python3.6'
-s3_bucket: 'nicor-dev'
-s3_key: 'deployments/lambdas/deliver_to_firehose_cross_account.zip'
