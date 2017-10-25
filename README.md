@@ -10,7 +10,8 @@ conda create --name aws-python-lambdas python=3.6.2
 source activate aws-python-lambdas
 pip install boto3
 pip install pytest
-pip install -r requirements.txt
+# install libs from the requirements of each single lambda
+for i in src/*/; do pip install -r $i"requirements.txt"; done
 </pre>
 
 # Structure
@@ -19,14 +20,16 @@ pip install -r requirements.txt
 └── src/
     ├── hello_world_lambda
     │    ├── __init__.py
+    │    ├── requirements.txt
     │    └── lambda_function.py
     └── lambda_function_test_
          ├── __init__.py
+         ├── requirements.txt
          └── lambda_function.py            
 </pre>
 
 Where:
-*  init.py is an empty file used during the building to retrieve th yml
+*  requirements.txt: contains the libs needed by the lambda
 *  lambda_function.py contains the lambda handler
 <pre>def lambda_handler(event, context):
     something = 'hello_world'

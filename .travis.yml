@@ -12,7 +12,9 @@ env:
 install:
   - pip install awscli
   - pip install boto3
-  - pip install -r requirements.txt
+
+  # install libs from the requirements of each single lambda
+  - for i in src/*/; do pip install -r $i"requirements.txt"; done
 
 script:
   # run tests
