@@ -26,18 +26,18 @@ before_deploy:
   - for i in src/*/; do .travis/build_lambda.sh "$i"; done
   - cp src/*.zip dist
 
-deploy:
-  provider:          s3
-  access_key_id:     $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  bucket:            $AWS_BUCKET
-  region:            $AWS_BUCKET_REGION
-  local_dir:         dist
-  upload-dir:        deployments/lambdas/travis_build
-  acl:               private # keep them private
-  skip_cleanup:      true
-  on:
-    all_branches: true
+# deploy:
+#   provider:          s3
+#   access_key_id:     $AWS_ACCESS_KEY_ID
+#   secret_access_key: $AWS_SECRET_ACCESS_KEY
+#   bucket:            $AWS_BUCKET
+#   region:            $AWS_BUCKET_REGION
+#   local_dir:         dist
+#   upload-dir:        deployments/lambdas/travis_build
+#   acl:               private # keep them private
+#   skip_cleanup:      true
+#   on:
+#     all_branches: true
 
 notifications:
   email: true
